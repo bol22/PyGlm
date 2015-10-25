@@ -5,7 +5,7 @@ Dependent files:
 
 (1) topology.json
 
-The lines of different areas, e.g. mv area (7.2kV transmission network) and lv areas (120V distribution network). 'a' and 'b' are the two end nodes of the line, 'len' is its length in feet, 'sd' denotes whether it is service drop, 'transformer' specifies its transformer type.
+The lines of different areas, e.g. MV area (7.2kV transmission network) and LV areas (120V distribution network). 'a' and 'b' are the two end nodes of the line, 'len' is its length in feet, 'sd' denotes whether it is service drop, 'transformer' specifies its transformer type.
 
 All the transformers that connect areas of different voltage levels (under "tr"). 
 
