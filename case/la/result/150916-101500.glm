@@ -1,0 +1,8952 @@
+//Simulation briefs : 
+//lv5 [BS] line [num 25, len 3999.118238 ft] service drop [num 90, len 5694.247558 ft] 
+//lv4 [CS] line [num 3, len 467.247718 ft] service drop [num 8, len 534.329085 ft] 
+//lv1 [BS] line [num 27, len 3177.272083 ft] service drop [num 128, len 6123.961154 ft] 
+//lv3 [AS] line [num 29, len 3798.936473 ft] service drop [num 129, len 7168.688550 ft] 
+//lv2 [CS] line [num 17, len 2370.086362 ft] service drop [num 62, len 3966.820665 ft] 
+//mv [ABCN] line [num 22, len 3615.535877 ft] service drop [num 0, len 0.000000 ft] 
+// topology flow
+// lv5 77, 76, 67, 66, 65, 12, 64, 61, 60
+// lv5 67, 68, 69, 70, 71, 72, 73, 74, 75
+// lv5 77, 80, 81, 82, 83, 84
+// lv5 61, 62, 63
+// lv5 77, 78, 79
+// lv4 104, 85
+// lv4 104, 105, 106
+// lv1 23, 25, 26, 27
+// lv1 14, 13, 11, 10, 9, 8, 7, 5, 4 , 3, 2, 1
+// lv1 14, 15, 16, 17, 18, 19, 20, 21, 23, 24
+// lv1 2, 22
+// lv1 26, 28, 29
+// lv1 5, 6
+// lv3 38, 39
+// lv3 44, 48, 49, 56, 57, 30, 58, 59
+// lv3 32, 33
+// lv3 44, 38, 37, 36, 34, 32, 31
+// lv3 44, 45, 46, 47
+// lv3 49, 50, 51, 52, 53, 54, 55
+// lv3 34, 35
+// lv3 38, 40, 41, 42, 43
+// lv2 88, 87, 86
+// lv2 88, 89, 90, 91, 92
+// lv2 88, 95, 96, 97, 98, 99, 100, 101, 102, 103
+// lv2 91, 93, 94
+// mv M85, TR104
+// mv 107, M85, M84, M83, M82
+
+// header, clock, and module#set iteration_limit=2000
+#define stylesheet=C:\Users\gridlabd-3_0
+
+clock {
+	timestamp '2000-01-01 0:00:00';
+	stoptime '2000-01-01 0:00:20';
+	timezone EST+5EDT;
+}
+
+module powerflow {
+	solver_method NR;
+};
+
+// physical parameters and properties
+object overhead_line_conductor {
+	name Iris;
+	geometric_mean_radius 0.0122;
+	resistance 1.679;
+}
+
+object line_spacing {
+	name MV_spacing;
+	distance_AB 2.5;
+	distance_AC 4.5;
+	distance_BC 7;
+	distance_AN 4.272002;
+	distance_BN 5.656854;
+	distance_CN 5.0;
+}
+
+object line_configuration {
+	name MV_LINE_CONFIG;
+	conductor_A Iris;
+	conductor_B Iris;
+	conductor_C Iris;
+	conductor_N Iris;
+	spacing MV_spacing;
+}
+
+object triplex_line_conductor {
+	name Shrimp;
+	geometric_mean_radius 0.01073;
+	resistance 0.825;
+}
+
+object triplex_line_configuration {
+	name LV_LINE_CONFIG;
+	conductor_1 Shrimp;
+	conductor_2 Shrimp;
+	conductor_N Shrimp;
+	insulation_thickness 0.045;
+	diameter 0.522;
+}
+
+object triplex_line_conductor {
+	name AWG6;
+	geometric_mean_radius 0.00675;
+	resistance 2.224;
+}
+
+object triplex_line_configuration {
+	name SERVICE_DROP_CONFIG;
+	conductor_1 AWG6;
+	conductor_2 AWG6;
+	conductor_N AWG6;
+	insulation_thickness 0.045;
+	diameter 0.522;
+}
+
+// transformers
+object transformer_configuration {
+	name split_BS_77;
+	connect_type SINGLE_PHASE_CENTER_TAPPED;
+	install_type POLETOP;
+	primary_voltage 7200.0;
+	secondary_voltage 120.0;
+	power_rating 100.0;
+	powerB_rating 100.0;
+	impedance 0.006+0.014j;
+	impedance1 0.012+0.020j;
+	impedance2 0.012+0.020j;
+	shunt_impedance 259200.000+103680.000j;
+}
+
+object transformer {
+	phases BS;
+	configuration split_BS_77;
+	from TR77;
+	to n77;
+	name t_TR77_n77;
+	nominal_voltage 7200.0;
+}
+
+object transformer_configuration {
+	name split_CS_88;
+	connect_type SINGLE_PHASE_CENTER_TAPPED;
+	install_type POLETOP;
+	primary_voltage 7200.0;
+	secondary_voltage 120.0;
+	power_rating 100.0;
+	powerC_rating 100.0;
+	impedance 0.006+0.014j;
+	impedance1 0.012+0.020j;
+	impedance2 0.012+0.020j;
+	shunt_impedance 259200.000+103680.000j;
+}
+
+object transformer {
+	phases CS;
+	configuration split_CS_88;
+	from TR88;
+	to n88;
+	name t_TR88_n88;
+	nominal_voltage 7200.0;
+}
+
+object transformer_configuration {
+	name split_BS_14;
+	connect_type SINGLE_PHASE_CENTER_TAPPED;
+	install_type POLETOP;
+	primary_voltage 7200.0;
+	secondary_voltage 120.0;
+	power_rating 100.0;
+	powerB_rating 100.0;
+	impedance 0.006+0.014j;
+	impedance1 0.012+0.020j;
+	impedance2 0.012+0.020j;
+	shunt_impedance 259200.000+103680.000j;
+}
+
+object transformer {
+	phases BS;
+	configuration split_BS_14;
+	from TR14;
+	to n14;
+	name t_TR14_n14;
+	nominal_voltage 7200.0;
+}
+
+object transformer_configuration {
+	name split_AS_44;
+	connect_type SINGLE_PHASE_CENTER_TAPPED;
+	install_type POLETOP;
+	primary_voltage 7200.0;
+	secondary_voltage 120.0;
+	power_rating 100.0;
+	powerA_rating 100.0;
+	impedance 0.006+0.014j;
+	impedance1 0.012+0.020j;
+	impedance2 0.012+0.020j;
+	shunt_impedance 259200.000+103680.000j;
+}
+
+object transformer {
+	phases AS;
+	configuration split_AS_44;
+	from TR44;
+	to n44;
+	name t_TR44_n44;
+	nominal_voltage 7200.0;
+}
+
+object transformer_configuration {
+	name split_CS_104;
+	connect_type SINGLE_PHASE_CENTER_TAPPED;
+	install_type POLETOP;
+	primary_voltage 7200.0;
+	secondary_voltage 120.0;
+	power_rating 100.0;
+	powerC_rating 100.0;
+	impedance 0.006+0.014j;
+	impedance1 0.012+0.020j;
+	impedance2 0.012+0.020j;
+	shunt_impedance 259200.000+103680.000j;
+}
+
+object transformer {
+	phases CS;
+	configuration split_CS_104;
+	from TR104;
+	to n104;
+	name t_TR104_n104;
+	nominal_voltage 7200.0;
+}
+
+// lines
+object triplex_line {
+	phases BS;
+	from n77;
+	to n76;
+	name lv_n77_n76;
+	configuration LV_LINE_CONFIG;
+	length 148.322511308;
+}
+
+object triplex_line {
+	phases BS;
+	from n77;
+	to n80;
+	name lv_n77_n80;
+	configuration LV_LINE_CONFIG;
+	length 165.29035962;
+}
+
+object triplex_line {
+	phases BS;
+	from n77;
+	to BC23;
+	name lv_n77_BC23;
+	configuration SERVICE_DROP_CONFIG;
+	length 82.470803164;
+}
+
+object triplex_line {
+	phases BS;
+	from n77;
+	to BC25;
+	name lv_n77_BC25;
+	configuration SERVICE_DROP_CONFIG;
+	length 82.470803164;
+}
+
+object triplex_line {
+	phases BS;
+	from n76;
+	to n67;
+	name lv_n76_n67;
+	configuration SERVICE_DROP_CONFIG;
+	length 204.583011796;
+}
+
+object triplex_line {
+	phases BS;
+	from n76;
+	to BC17;
+	name lv_n76_BC17;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.630907452;
+}
+
+object triplex_line {
+	phases BS;
+	from n76;
+	to BC19;
+	name lv_n76_BC19;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.630907452;
+}
+
+object triplex_line {
+	phases BS;
+	from n77;
+	to n78;
+	name lv_n77_n78;
+	configuration SERVICE_DROP_CONFIG;
+	length 182.089572756;
+}
+
+object triplex_line {
+	phases BS;
+	from n77;
+	to BC21;
+	name lv_n77_BC21;
+	configuration SERVICE_DROP_CONFIG;
+	length 82.470803164;
+}
+
+object triplex_line {
+	phases BS;
+	from n80;
+	to n81;
+	name lv_n80_n81;
+	configuration SERVICE_DROP_CONFIG;
+	length 207.771332108;
+}
+
+object triplex_line {
+	phases BS;
+	from n80;
+	to BC29;
+	name lv_n80_BC29;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.75721928;
+}
+
+object triplex_line {
+	phases BS;
+	from n67;
+	to n66;
+	name lv_n67_n66;
+	configuration SERVICE_DROP_CONFIG;
+	length 162.671265048;
+}
+
+object triplex_line {
+	phases BS;
+	from n67;
+	to BC2;
+	name lv_n67_BC2;
+	configuration SERVICE_DROP_CONFIG;
+	length 47.557744304;
+}
+
+object triplex_line {
+	phases BS;
+	from n76;
+	to BC15;
+	name lv_n76_BC15;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.630907452;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to n79;
+	name lv_n78_n79;
+	configuration SERVICE_DROP_CONFIG;
+	length 209.43734266;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN8;
+	name lv_n78_IN8;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN6;
+	name lv_n78_IN6;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN2;
+	name lv_n78_IN2;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN10;
+	name lv_n78_IN10;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN5;
+	name lv_n78_IN5;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN2B;
+	name lv_n78_IN2B;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n81;
+	to n82;
+	name lv_n81_n82;
+	configuration SERVICE_DROP_CONFIG;
+	length 189.561357772;
+}
+
+object triplex_line {
+	phases BS;
+	from n81;
+	to RG2;
+	name lv_n81_RG2;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.437666104;
+}
+
+object triplex_line {
+	phases BS;
+	from n81;
+	to RG6;
+	name lv_n81_RG6;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.437666104;
+}
+
+object triplex_line {
+	phases BS;
+	from n66;
+	to n65;
+	name lv_n66_n65;
+	configuration SERVICE_DROP_CONFIG;
+	length 171.53707898;
+}
+
+object triplex_line {
+	phases BS;
+	from n66;
+	to CN41;
+	name lv_n66_CN41;
+	configuration SERVICE_DROP_CONFIG;
+	length 72.544621744;
+}
+
+object triplex_line {
+	phases BS;
+	from n66;
+	to BC1;
+	name lv_n66_BC1;
+	configuration SERVICE_DROP_CONFIG;
+	length 72.544621744;
+}
+
+object triplex_line {
+	phases BS;
+	from n67;
+	to n68;
+	name lv_n67_n68;
+	configuration SERVICE_DROP_CONFIG;
+	length 67.809713456;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN4;
+	name lv_n78_IN4;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n79;
+	to IN14;
+	name lv_n79_IN14;
+	configuration SERVICE_DROP_CONFIG;
+	length 30.897638784;
+}
+
+object triplex_line {
+	phases BS;
+	from n79;
+	to IN11;
+	name lv_n79_IN11;
+	configuration SERVICE_DROP_CONFIG;
+	length 30.897638784;
+}
+
+object triplex_line {
+	phases BS;
+	from n78;
+	to IN1;
+	name lv_n78_IN1;
+	configuration SERVICE_DROP_CONFIG;
+	length 84.488519764;
+}
+
+object triplex_line {
+	phases BS;
+	from n81;
+	to RG4;
+	name lv_n81_RG4;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.437666104;
+}
+
+object triplex_line {
+	phases BS;
+	from n82;
+	to n83;
+	name lv_n82_n83;
+	configuration SERVICE_DROP_CONFIG;
+	length 201.459324032;
+}
+
+object triplex_line {
+	phases BS;
+	from n82;
+	to RG10;
+	name lv_n82_RG10;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.428479176;
+}
+
+object triplex_line {
+	phases BS;
+	from n82;
+	to RG18A;
+	name lv_n82_RG18A;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.428479176;
+}
+
+object triplex_line {
+	phases BS;
+	from n65;
+	to n12;
+	name lv_n65_n12;
+	configuration SERVICE_DROP_CONFIG;
+	length 99.991473016;
+}
+
+object triplex_line {
+	phases BS;
+	from n65;
+	to CN36;
+	name lv_n65_CN36;
+	configuration SERVICE_DROP_CONFIG;
+	length 12.87073532;
+}
+
+object triplex_line {
+	phases BS;
+	from n68;
+	to n69;
+	name lv_n68_n69;
+	configuration SERVICE_DROP_CONFIG;
+	length 124.07480712;
+}
+
+object triplex_line {
+	phases BS;
+	from n68;
+	to BC9C;
+	name lv_n68_BC9C;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.216864804;
+}
+
+object triplex_line {
+	phases BS;
+	from n68;
+	to NV31;
+	name lv_n68_NV31;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.216864804;
+}
+
+object triplex_line {
+	phases BS;
+	from n79;
+	to IN12;
+	name lv_n79_IN12;
+	configuration SERVICE_DROP_CONFIG;
+	length 30.897638784;
+}
+
+object triplex_line {
+	phases BS;
+	from n82;
+	to RG18;
+	name lv_n82_RG18;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.428479176;
+}
+
+object triplex_line {
+	phases BS;
+	from n83;
+	to n84;
+	name lv_n83_n84;
+	configuration SERVICE_DROP_CONFIG;
+	length 219.749678948;
+}
+
+object triplex_line {
+	phases BS;
+	from n83;
+	to RG24;
+	name lv_n83_RG24;
+	configuration SERVICE_DROP_CONFIG;
+	length 87.544622224;
+}
+
+object triplex_line {
+	phases BS;
+	from n83;
+	to RG26A;
+	name lv_n83_RG26A;
+	configuration SERVICE_DROP_CONFIG;
+	length 87.544622224;
+}
+
+object triplex_line {
+	phases BS;
+	from n83;
+	to RG26;
+	name lv_n83_RG26;
+	configuration SERVICE_DROP_CONFIG;
+	length 87.544622224;
+}
+
+object triplex_line {
+	phases BS;
+	from n83;
+	to RG20;
+	name lv_n83_RG20;
+	configuration SERVICE_DROP_CONFIG;
+	length 87.544622224;
+}
+
+object triplex_line {
+	phases BS;
+	from n12;
+	to n64;
+	name lv_n12_n64;
+	configuration SERVICE_DROP_CONFIG;
+	length 141.358928408;
+}
+
+object triplex_line {
+	phases BS;
+	from n12;
+	to DI3A;
+	name lv_n12_DI3A;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.576445764;
+}
+
+object triplex_line {
+	phases BS;
+	from n12;
+	to CN34;
+	name lv_n12_CN34;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.576445764;
+}
+
+object triplex_line {
+	phases BS;
+	from n12;
+	to DI4;
+	name lv_n12_DI4;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.576445764;
+}
+
+object triplex_line {
+	phases BS;
+	from n68;
+	to NV33;
+	name lv_n68_NV33;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.216864804;
+}
+
+object triplex_line {
+	phases BS;
+	from n69;
+	to n70;
+	name lv_n69_n70;
+	configuration SERVICE_DROP_CONFIG;
+	length 132.900594804;
+}
+
+object triplex_line {
+	phases BS;
+	from n69;
+	to NV25;
+	name lv_n69_NV25;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.667325128;
+}
+
+object triplex_line {
+	phases BS;
+	from n69;
+	to NV23A;
+	name lv_n69_NV23A;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.667325128;
+}
+
+object triplex_line {
+	phases BS;
+	from n83;
+	to RG22;
+	name lv_n83_RG22;
+	configuration SERVICE_DROP_CONFIG;
+	length 87.544622224;
+}
+
+object triplex_line {
+	phases BS;
+	from n84;
+	to RG28;
+	name lv_n84_RG28;
+	configuration SERVICE_DROP_CONFIG;
+	length 90.896000284;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to n61;
+	name lv_n64_n61;
+	configuration SERVICE_DROP_CONFIG;
+	length 138.899610744;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to DI10;
+	name lv_n64_DI10;
+	configuration SERVICE_DROP_CONFIG;
+	length 54.937009632;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to DI9;
+	name lv_n64_DI9;
+	configuration SERVICE_DROP_CONFIG;
+	length 54.937009632;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to DI7;
+	name lv_n64_DI7;
+	configuration SERVICE_DROP_CONFIG;
+	length 54.937009632;
+}
+
+object triplex_line {
+	phases BS;
+	from n12;
+	to CN32;
+	name lv_n12_CN32;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.576445764;
+}
+
+object triplex_line {
+	phases BS;
+	from n70;
+	to n71;
+	name lv_n70_n71;
+	configuration SERVICE_DROP_CONFIG;
+	length 154.771658496;
+}
+
+object triplex_line {
+	phases BS;
+	from n70;
+	to NV17A;
+	name lv_n70_NV17A;
+	configuration SERVICE_DROP_CONFIG;
+	length 101.513126608;
+}
+
+object triplex_line {
+	phases BS;
+	from n70;
+	to NV19;
+	name lv_n70_NV19;
+	configuration SERVICE_DROP_CONFIG;
+	length 101.513126608;
+}
+
+object triplex_line {
+	phases BS;
+	from n70;
+	to NV15;
+	name lv_n70_NV15;
+	configuration SERVICE_DROP_CONFIG;
+	length 101.513126608;
+}
+
+object triplex_line {
+	phases BS;
+	from n70;
+	to NV21;
+	name lv_n70_NV21;
+	configuration SERVICE_DROP_CONFIG;
+	length 101.513126608;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to n60;
+	name lv_n61_n60;
+	configuration SERVICE_DROP_CONFIG;
+	length 173.568247024;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to n62;
+	name lv_n61_n62;
+	configuration SERVICE_DROP_CONFIG;
+	length 197.161095548;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to DI21;
+	name lv_n61_DI21;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.25689198;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to DI19;
+	name lv_n61_DI19;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.25689198;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to DI15;
+	name lv_n61_DI15;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.25689198;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to DI21A;
+	name lv_n61_DI21A;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.25689198;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to DI11;
+	name lv_n64_DI11;
+	configuration SERVICE_DROP_CONFIG;
+	length 54.937009632;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to DI3;
+	name lv_n64_DI3;
+	configuration SERVICE_DROP_CONFIG;
+	length 54.937009632;
+}
+
+object triplex_line {
+	phases BS;
+	from n64;
+	to DI5;
+	name lv_n64_DI5;
+	configuration SERVICE_DROP_CONFIG;
+	length 54.937009632;
+}
+
+object triplex_line {
+	phases BS;
+	from n70;
+	to NV17;
+	name lv_n70_NV17;
+	configuration SERVICE_DROP_CONFIG;
+	length 101.513126608;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to n72;
+	name lv_n71_n72;
+	configuration SERVICE_DROP_CONFIG;
+	length 141.997051788;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to NV13A;
+	name lv_n71_NV13A;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.605319428;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to NV9A;
+	name lv_n71_NV9A;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.605319428;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to NV7A;
+	name lv_n71_NV7A;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.605319428;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to NV3;
+	name lv_n71_NV3;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.605319428;
+}
+
+object triplex_line {
+	phases BS;
+	from n60;
+	to DI23A;
+	name lv_n60_DI23A;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.1246732;
+}
+
+object triplex_line {
+	phases BS;
+	from n60;
+	to DI23;
+	name lv_n60_DI23;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.1246732;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to DI17;
+	name lv_n61_DI17;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.25689198;
+}
+
+object triplex_line {
+	phases BS;
+	from n61;
+	to DI12;
+	name lv_n61_DI12;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.25689198;
+}
+
+object triplex_line {
+	phases BS;
+	from n62;
+	to n63;
+	name lv_n62_n63;
+	configuration SERVICE_DROP_CONFIG;
+	length 152.85597602;
+}
+
+object triplex_line {
+	phases BS;
+	from n62;
+	to TV12;
+	name lv_n62_TV12;
+	configuration SERVICE_DROP_CONFIG;
+	length 20.256234244;
+}
+
+object triplex_line {
+	phases BS;
+	from n62;
+	to TV16;
+	name lv_n62_TV16;
+	configuration SERVICE_DROP_CONFIG;
+	length 20.256234244;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to NV7;
+	name lv_n71_NV7;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.605319428;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to n73;
+	name lv_n72_n73;
+	configuration SERVICE_DROP_CONFIG;
+	length 147.2933118;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN11A;
+	name lv_n72_DN11A;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN13;
+	name lv_n72_DN13;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN9A;
+	name lv_n72_DN9A;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN7;
+	name lv_n72_DN7;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN9;
+	name lv_n72_DN9;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n71;
+	to NV9;
+	name lv_n71_NV9;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.605319428;
+}
+
+object triplex_line {
+	phases BS;
+	from n60;
+	to DI25;
+	name lv_n60_DI25;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.1246732;
+}
+
+object triplex_line {
+	phases BS;
+	from n62;
+	to TV14;
+	name lv_n62_TV14;
+	configuration SERVICE_DROP_CONFIG;
+	length 20.256234244;
+}
+
+object triplex_line {
+	phases BS;
+	from n63;
+	to TV13;
+	name lv_n63_TV13;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.100394472;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN11;
+	name lv_n72_DN11;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN6;
+	name lv_n72_DN6;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n73;
+	to n74;
+	name lv_n73_n74;
+	configuration SERVICE_DROP_CONFIG;
+	length 118.527890932;
+}
+
+object triplex_line {
+	phases BS;
+	from n73;
+	to DN19;
+	name lv_n73_DN19;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.497049308;
+}
+
+object triplex_line {
+	phases BS;
+	from n73;
+	to DN12A;
+	name lv_n73_DN12A;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.497049308;
+}
+
+object triplex_line {
+	phases BS;
+	from n72;
+	to DN12;
+	name lv_n72_DN12;
+	configuration SERVICE_DROP_CONFIG;
+	length 23.22342594;
+}
+
+object triplex_line {
+	phases BS;
+	from n73;
+	to DN18;
+	name lv_n73_DN18;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.497049308;
+}
+
+object triplex_line {
+	phases BS;
+	from n74;
+	to n75;
+	name lv_n74_n75;
+	configuration SERVICE_DROP_CONFIG;
+	length 145.435044024;
+}
+
+object triplex_line {
+	phases BS;
+	from n74;
+	to DN23;
+	name lv_n74_DN23;
+	configuration SERVICE_DROP_CONFIG;
+	length 9.81463286;
+}
+
+object triplex_line {
+	phases BS;
+	from n74;
+	to DN25;
+	name lv_n74_DN25;
+	configuration SERVICE_DROP_CONFIG;
+	length 9.81463286;
+}
+
+object triplex_line {
+	phases BS;
+	from n74;
+	to DN18B;
+	name lv_n74_DN18B;
+	configuration SERVICE_DROP_CONFIG;
+	length 9.81463286;
+}
+
+object triplex_line {
+	phases BS;
+	from n74;
+	to DN22;
+	name lv_n74_DN22;
+	configuration SERVICE_DROP_CONFIG;
+	length 9.81463286;
+}
+
+object triplex_line {
+	phases BS;
+	from n75;
+	to DN24;
+	name lv_n75_DN24;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.208335452;
+}
+
+object triplex_line {
+	phases BS;
+	from n75;
+	to DN26;
+	name lv_n75_DN26;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.208335452;
+}
+
+object triplex_line {
+	phases CS;
+	from n104;
+	to n85;
+	name lv_n104_n85;
+	configuration LV_LINE_CONFIG;
+	length 207.701122132;
+}
+
+object triplex_line {
+	phases CS;
+	from n104;
+	to DG1;
+	name lv_n104_DG1;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.723754776;
+}
+
+object triplex_line {
+	phases CS;
+	from n104;
+	to DG5;
+	name lv_n104_DG5;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.723754776;
+}
+
+object triplex_line {
+	phases CS;
+	from n85;
+	to DII80;
+	name lv_n85_DII80;
+	configuration SERVICE_DROP_CONFIG;
+	length 106.73064646;
+}
+
+object triplex_line {
+	phases CS;
+	from n104;
+	to n105;
+	name lv_n104_n105;
+	configuration SERVICE_DROP_CONFIG;
+	length 132.963586932;
+}
+
+object triplex_line {
+	phases CS;
+	from n85;
+	to DG4;
+	name lv_n85_DG4;
+	configuration SERVICE_DROP_CONFIG;
+	length 106.73064646;
+}
+
+object triplex_line {
+	phases CS;
+	from n105;
+	to n106;
+	name lv_n105_n106;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.5830093;
+}
+
+object triplex_line {
+	phases CS;
+	from n105;
+	to DG10;
+	name lv_n105_DG10;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.011812272;
+}
+
+object triplex_line {
+	phases CS;
+	from n106;
+	to DG9;
+	name lv_n106_DG9;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.802823532;
+}
+
+object triplex_line {
+	phases CS;
+	from n106;
+	to DG12;
+	name lv_n106_DG12;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.802823532;
+}
+
+object triplex_line {
+	phases CS;
+	from n106;
+	to DG11;
+	name lv_n106_DG11;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.802823532;
+}
+
+object triplex_line {
+	phases BS;
+	from n14;
+	to n15;
+	name lv_n14_n15;
+	configuration LV_LINE_CONFIG;
+	length 152.858600692;
+}
+
+object triplex_line {
+	phases BS;
+	from n14;
+	to CN26;
+	name lv_n14_CN26;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.331366408;
+}
+
+object triplex_line {
+	phases BS;
+	from n14;
+	to CN29A;
+	name lv_n14_CN29A;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.331366408;
+}
+
+object triplex_line {
+	phases BS;
+	from n15;
+	to n16;
+	name lv_n15_n16;
+	configuration SERVICE_DROP_CONFIG;
+	length 132.74606724;
+}
+
+object triplex_line {
+	phases BS;
+	from n15;
+	to SAN6;
+	name lv_n15_SAN6;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.666011576;
+}
+
+object triplex_line {
+	phases BS;
+	from n15;
+	to SAN4;
+	name lv_n15_SAN4;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.666011576;
+}
+
+object triplex_line {
+	phases BS;
+	from n15;
+	to SAN6A;
+	name lv_n15_SAN6A;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.666011576;
+}
+
+object triplex_line {
+	phases BS;
+	from n14;
+	to n13;
+	name lv_n14_n13;
+	configuration SERVICE_DROP_CONFIG;
+	length 118.909780708;
+}
+
+object triplex_line {
+	phases BS;
+	from n14;
+	to CN29;
+	name lv_n14_CN29;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.331366408;
+}
+
+object triplex_line {
+	phases BS;
+	from n16;
+	to n17;
+	name lv_n16_n17;
+	configuration SERVICE_DROP_CONFIG;
+	length 113.958665064;
+}
+
+object triplex_line {
+	phases BS;
+	from n16;
+	to SAN10;
+	name lv_n16_SAN10;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.001641796;
+}
+
+object triplex_line {
+	phases BS;
+	from n16;
+	to SAN7;
+	name lv_n16_SAN7;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.001641796;
+}
+
+object triplex_line {
+	phases BS;
+	from n16;
+	to SAN1;
+	name lv_n16_SAN1;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.001641796;
+}
+
+object triplex_line {
+	phases BS;
+	from n15;
+	to SAN2;
+	name lv_n15_SAN2;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.666011576;
+}
+
+object triplex_line {
+	phases BS;
+	from n13;
+	to n11;
+	name lv_n13_n11;
+	configuration SERVICE_DROP_CONFIG;
+	length 74.131235968;
+}
+
+object triplex_line {
+	phases BS;
+	from n13;
+	to CN37;
+	name lv_n13_CN37;
+	configuration SERVICE_DROP_CONFIG;
+	length 61.887797256;
+}
+
+object triplex_line {
+	phases BS;
+	from n13;
+	to CN30;
+	name lv_n13_CN30;
+	configuration SERVICE_DROP_CONFIG;
+	length 61.887797256;
+}
+
+object triplex_line {
+	phases BS;
+	from n13;
+	to CN28;
+	name lv_n13_CN28;
+	configuration SERVICE_DROP_CONFIG;
+	length 61.887797256;
+}
+
+object triplex_line {
+	phases BS;
+	from n17;
+	to n18;
+	name lv_n17_n18;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.104007076;
+}
+
+object triplex_line {
+	phases BS;
+	from n17;
+	to SAN18;
+	name lv_n17_SAN18;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.339897296;
+}
+
+object triplex_line {
+	phases BS;
+	from n17;
+	to SAN15;
+	name lv_n17_SAN15;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.339897296;
+}
+
+object triplex_line {
+	phases BS;
+	from n17;
+	to SAN9;
+	name lv_n17_SAN9;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.339897296;
+}
+
+object triplex_line {
+	phases BS;
+	from n17;
+	to JC5;
+	name lv_n17_JC5;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.339897296;
+}
+
+object triplex_line {
+	phases BS;
+	from n17;
+	to JC3;
+	name lv_n17_JC3;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.339897296;
+}
+
+object triplex_line {
+	phases BS;
+	from n16;
+	to SAN12;
+	name lv_n16_SAN12;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.001641796;
+}
+
+object triplex_line {
+	phases BS;
+	from n11;
+	to n10;
+	name lv_n11_n10;
+	configuration SERVICE_DROP_CONFIG;
+	length 144.775595184;
+}
+
+object triplex_line {
+	phases BS;
+	from n11;
+	to SAT5A;
+	name lv_n11_SAT5A;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.953742108;
+}
+
+object triplex_line {
+	phases BS;
+	from n11;
+	to SAT3;
+	name lv_n11_SAT3;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.953742108;
+}
+
+object triplex_line {
+	phases BS;
+	from n11;
+	to DI6;
+	name lv_n11_DI6;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.953742108;
+}
+
+object triplex_line {
+	phases BS;
+	from n11;
+	to DI4A;
+	name lv_n11_DI4A;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.953742108;
+}
+
+object triplex_line {
+	phases BS;
+	from n13;
+	to CN35;
+	name lv_n13_CN35;
+	configuration SERVICE_DROP_CONFIG;
+	length 61.887797256;
+}
+
+object triplex_line {
+	phases BS;
+	from n13;
+	to CN39;
+	name lv_n13_CN39;
+	configuration SERVICE_DROP_CONFIG;
+	length 61.887797256;
+}
+
+object triplex_line {
+	phases BS;
+	from n18;
+	to n19;
+	name lv_n18_n19;
+	configuration SERVICE_DROP_CONFIG;
+	length 119.78674924;
+}
+
+object triplex_line {
+	phases BS;
+	from n18;
+	to SAN20;
+	name lv_n18_SAN20;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.2047264;
+}
+
+object triplex_line {
+	phases BS;
+	from n18;
+	to SAN22;
+	name lv_n18_SAN22;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.2047264;
+}
+
+object triplex_line {
+	phases BS;
+	from n18;
+	to JC6;
+	name lv_n18_JC6;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.2047264;
+}
+
+object triplex_line {
+	phases BS;
+	from n10;
+	to n9;
+	name lv_n10_n9;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.219489604;
+}
+
+object triplex_line {
+	phases BS;
+	from n10;
+	to SAT11;
+	name lv_n10_SAT11;
+	configuration SERVICE_DROP_CONFIG;
+	length 10.658464908;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to n20;
+	name lv_n19_n20;
+	configuration SERVICE_DROP_CONFIG;
+	length 117.025594296;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to SAN25;
+	name lv_n19_SAN25;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.114174864;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to SAN26;
+	name lv_n19_SAN26;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.114174864;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to SAN28;
+	name lv_n19_SAN28;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.114174864;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to SAN32;
+	name lv_n19_SAN32;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.114174864;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to SAN30;
+	name lv_n19_SAN30;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.114174864;
+}
+
+object triplex_line {
+	phases BS;
+	from n9;
+	to n8;
+	name lv_n9_n8;
+	configuration SERVICE_DROP_CONFIG;
+	length 82.559385844;
+}
+
+object triplex_line {
+	phases BS;
+	from n9;
+	to SAT17A;
+	name lv_n9_SAT17A;
+	configuration SERVICE_DROP_CONFIG;
+	length 15.68077478;
+}
+
+object triplex_line {
+	phases BS;
+	from n9;
+	to SAT13;
+	name lv_n9_SAT13;
+	configuration SERVICE_DROP_CONFIG;
+	length 15.68077478;
+}
+
+object triplex_line {
+	phases BS;
+	from n9;
+	to SAT15;
+	name lv_n9_SAT15;
+	configuration SERVICE_DROP_CONFIG;
+	length 15.68077478;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to n21;
+	name lv_n20_n21;
+	configuration SERVICE_DROP_CONFIG;
+	length 138.525594984;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to SAN29;
+	name lv_n20_SAN29;
+	configuration SERVICE_DROP_CONFIG;
+	length 37.606300416;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to SAN36;
+	name lv_n20_SAN36;
+	configuration SERVICE_DROP_CONFIG;
+	length 37.606300416;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to SAN31;
+	name lv_n20_SAN31;
+	configuration SERVICE_DROP_CONFIG;
+	length 37.606300416;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to QI4;
+	name lv_n20_QI4;
+	configuration SERVICE_DROP_CONFIG;
+	length 37.606300416;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to QI6;
+	name lv_n20_QI6;
+	configuration SERVICE_DROP_CONFIG;
+	length 37.606300416;
+}
+
+object triplex_line {
+	phases BS;
+	from n19;
+	to SAN27;
+	name lv_n19_SAN27;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.114174864;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to n7;
+	name lv_n8_n7;
+	configuration SERVICE_DROP_CONFIG;
+	length 137.714571336;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to SAT19;
+	name lv_n8_SAT19;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.090223676;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to SAT2;
+	name lv_n8_SAT2;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.090223676;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to SAT25;
+	name lv_n8_SAT25;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.090223676;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to SAT2A;
+	name lv_n8_SAT2A;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.090223676;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to n23;
+	name lv_n21_n23;
+	configuration SERVICE_DROP_CONFIG;
+	length 184.287735556;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to QI11;
+	name lv_n21_QI11;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to QI17;
+	name lv_n21_QI17;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to SAN35;
+	name lv_n21_SAN35;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to QI15;
+	name lv_n21_QI15;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to SAN33;
+	name lv_n21_SAN33;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to QI9;
+	name lv_n21_QI9;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to QI7;
+	name lv_n21_QI7;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n20;
+	to SAN34;
+	name lv_n20_SAN34;
+	configuration SERVICE_DROP_CONFIG;
+	length 37.606300416;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to SAT4;
+	name lv_n8_SAT4;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.090223676;
+}
+
+object triplex_line {
+	phases BS;
+	from n8;
+	to SAT21;
+	name lv_n8_SAT21;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.090223676;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to n5;
+	name lv_n7_n5;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.620737584;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to SAT31;
+	name lv_n7_SAT31;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.639764568;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to SAT31A;
+	name lv_n7_SAT31A;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.639764568;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to SAT27;
+	name lv_n7_SAT27;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.639764568;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to SAT29;
+	name lv_n7_SAT29;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.639764568;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to JC11;
+	name lv_n7_JC11;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.639764568;
+}
+
+object triplex_line {
+	phases BS;
+	from n21;
+	to QI13;
+	name lv_n21_QI13;
+	configuration SERVICE_DROP_CONFIG;
+	length 66.759188488;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to n24;
+	name lv_n23_n24;
+	configuration SERVICE_DROP_CONFIG;
+	length 147.880254076;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to QI19;
+	name lv_n23_QI19;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to QI21;
+	name lv_n23_QI21;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to QI23;
+	name lv_n23_QI23;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to QI29;
+	name lv_n23_QI29;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to SJ37;
+	name lv_n23_SJ37;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to QI8;
+	name lv_n23_QI8;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n7;
+	to JC14;
+	name lv_n7_JC14;
+	configuration SERVICE_DROP_CONFIG;
+	length 24.639764568;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to n4 ;
+	name lv_n5_n4 ;
+	configuration SERVICE_DROP_CONFIG;
+	length 115.384518128;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to SAT41A;
+	name lv_n5_SAT41A;
+	configuration SERVICE_DROP_CONFIG;
+	length 41.316274288;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to SAT35;
+	name lv_n5_SAT35;
+	configuration SERVICE_DROP_CONFIG;
+	length 41.316274288;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to SAT12;
+	name lv_n5_SAT12;
+	configuration SERVICE_DROP_CONFIG;
+	length 41.316274288;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to SAT37A;
+	name lv_n5_SAT37A;
+	configuration SERVICE_DROP_CONFIG;
+	length 41.316274288;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to n25;
+	name lv_n23_n25;
+	configuration SERVICE_DROP_CONFIG;
+	length 142.374676472;
+}
+
+object triplex_line {
+	phases BS;
+	from n23;
+	to QI27;
+	name lv_n23_QI27;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.156497924;
+}
+
+object triplex_line {
+	phases BS;
+	from n24;
+	to QI20;
+	name lv_n24_QI20;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.358925816;
+}
+
+object triplex_line {
+	phases BS;
+	from n24;
+	to QI37;
+	name lv_n24_QI37;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.358925816;
+}
+
+object triplex_line {
+	phases BS;
+	from n24;
+	to QI24;
+	name lv_n24_QI24;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.358925816;
+}
+
+object triplex_line {
+	phases BS;
+	from n24;
+	to QI33A;
+	name lv_n24_QI33A;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.358925816;
+}
+
+object triplex_line {
+	phases BS;
+	from n4 ;
+	to n3;
+	name lv_n4 _n3;
+	configuration SERVICE_DROP_CONFIG;
+	length 164.947183756;
+}
+
+object triplex_line {
+	phases BS;
+	from n4 ;
+	to SAT45;
+	name lv_n4 _SAT45;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.441274996;
+}
+
+object triplex_line {
+	phases BS;
+	from n4 ;
+	to SAT18;
+	name lv_n4 _SAT18;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.441274996;
+}
+
+object triplex_line {
+	phases BS;
+	from n4 ;
+	to SAT16;
+	name lv_n4 _SAT16;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.441274996;
+}
+
+object triplex_line {
+	phases BS;
+	from n4 ;
+	to SAT18A;
+	name lv_n4 _SAT18A;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.441274996;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to n6;
+	name lv_n5_n6;
+	configuration SERVICE_DROP_CONFIG;
+	length 88.81069838;
+}
+
+object triplex_line {
+	phases BS;
+	from n5;
+	to SAT10;
+	name lv_n5_SAT10;
+	configuration SERVICE_DROP_CONFIG;
+	length 41.316274288;
+}
+
+object triplex_line {
+	phases BS;
+	from n25;
+	to n26;
+	name lv_n25_n26;
+	configuration SERVICE_DROP_CONFIG;
+	length 98.154858784;
+}
+
+object triplex_line {
+	phases BS;
+	from n25;
+	to QI14;
+	name lv_n25_QI14;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.40945024;
+}
+
+object triplex_line {
+	phases BS;
+	from n25;
+	to SJ33;
+	name lv_n25_SJ33;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.40945024;
+}
+
+object triplex_line {
+	phases BS;
+	from n25;
+	to SJ35;
+	name lv_n25_SJ35;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.40945024;
+}
+
+object triplex_line {
+	phases BS;
+	from n24;
+	to QI22;
+	name lv_n24_QI22;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.358925816;
+}
+
+object triplex_line {
+	phases BS;
+	from n24;
+	to QI39;
+	name lv_n24_QI39;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.358925816;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to n2;
+	name lv_n3_n2;
+	configuration SERVICE_DROP_CONFIG;
+	length 144.13878414;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to QI2A;
+	name lv_n3_QI2A;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to SAT51;
+	name lv_n3_SAT51;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to SAT53B;
+	name lv_n3_SAT53B;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to SAT24;
+	name lv_n3_SAT24;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to QI2B;
+	name lv_n3_QI2B;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to SAT20;
+	name lv_n3_SAT20;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n4 ;
+	to SAT47;
+	name lv_n4 _SAT47;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.441274996;
+}
+
+object triplex_line {
+	phases BS;
+	from n6;
+	to SAN19;
+	name lv_n6_SAN19;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.918964532;
+}
+
+object triplex_line {
+	phases BS;
+	from n6;
+	to SAN21;
+	name lv_n6_SAN21;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.918964532;
+}
+
+object triplex_line {
+	phases BS;
+	from n25;
+	to QI16;
+	name lv_n25_QI16;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.40945024;
+}
+
+object triplex_line {
+	phases BS;
+	from n25;
+	to SJ31;
+	name lv_n25_SJ31;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.40945024;
+}
+
+object triplex_line {
+	phases BS;
+	from n26;
+	to n27;
+	name lv_n26_n27;
+	configuration SERVICE_DROP_CONFIG;
+	length 94.127627684;
+}
+
+object triplex_line {
+	phases BS;
+	from n26;
+	to SJ34;
+	name lv_n26_SJ34;
+	configuration SERVICE_DROP_CONFIG;
+	length 41.889108952;
+}
+
+object triplex_line {
+	phases BS;
+	from n2;
+	to n1;
+	name lv_n2_n1;
+	configuration SERVICE_DROP_CONFIG;
+	length 137.069558192;
+}
+
+object triplex_line {
+	phases BS;
+	from n2;
+	to QI1A;
+	name lv_n2_QI1A;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.985566256;
+}
+
+object triplex_line {
+	phases BS;
+	from n2;
+	to SAT63;
+	name lv_n2_SAT63;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.985566256;
+}
+
+object triplex_line {
+	phases BS;
+	from n3;
+	to SAT53;
+	name lv_n3_SAT53;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.66863644;
+}
+
+object triplex_line {
+	phases BS;
+	from n6;
+	to SAN23;
+	name lv_n6_SAN23;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.918964532;
+}
+
+object triplex_line {
+	phases BS;
+	from n26;
+	to n28;
+	name lv_n26_n28;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.8074161;
+}
+
+object triplex_line {
+	phases BS;
+	from n27;
+	to JC4;
+	name lv_n27_JC4;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.364174648;
+}
+
+object triplex_line {
+	phases BS;
+	from n27;
+	to SJ25;
+	name lv_n27_SJ25;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.364174648;
+}
+
+object triplex_line {
+	phases BS;
+	from n27;
+	to SJ29;
+	name lv_n27_SJ29;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.364174648;
+}
+
+object triplex_line {
+	phases BS;
+	from n1;
+	to SAT69;
+	name lv_n1_SAT69;
+	configuration SERVICE_DROP_CONFIG;
+	length 59.333663316;
+}
+
+object triplex_line {
+	phases BS;
+	from n1;
+	to SAT69A;
+	name lv_n1_SAT69A;
+	configuration SERVICE_DROP_CONFIG;
+	length 59.333663316;
+}
+
+object triplex_line {
+	phases BS;
+	from n2;
+	to n22;
+	name lv_n2_n22;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.533466792;
+}
+
+object triplex_line {
+	phases BS;
+	from n2;
+	to SAT65A;
+	name lv_n2_SAT65A;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.985566256;
+}
+
+object triplex_line {
+	phases BS;
+	from n2;
+	to SAT67;
+	name lv_n2_SAT67;
+	configuration SERVICE_DROP_CONFIG;
+	length 60.985566256;
+}
+
+object triplex_line {
+	phases BS;
+	from n28;
+	to n29;
+	name lv_n28_n29;
+	configuration SERVICE_DROP_CONFIG;
+	length 146.81923042;
+}
+
+object triplex_line {
+	phases BS;
+	from n28;
+	to SJ30;
+	name lv_n28_SJ30;
+	configuration SERVICE_DROP_CONFIG;
+	length 13.84350438;
+}
+
+object triplex_line {
+	phases BS;
+	from n28;
+	to SJ26;
+	name lv_n28_SJ26;
+	configuration SERVICE_DROP_CONFIG;
+	length 13.84350438;
+}
+
+object triplex_line {
+	phases BS;
+	from n28;
+	to SJ23;
+	name lv_n28_SJ23;
+	configuration SERVICE_DROP_CONFIG;
+	length 13.84350438;
+}
+
+object triplex_line {
+	phases BS;
+	from n28;
+	to SJ28;
+	name lv_n28_SJ28;
+	configuration SERVICE_DROP_CONFIG;
+	length 13.84350438;
+}
+
+object triplex_line {
+	phases BS;
+	from n27;
+	to JC1;
+	name lv_n27_JC1;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.364174648;
+}
+
+object triplex_line {
+	phases BS;
+	from n27;
+	to SJ27;
+	name lv_n27_SJ27;
+	configuration SERVICE_DROP_CONFIG;
+	length 44.364174648;
+}
+
+object triplex_line {
+	phases BS;
+	from n1;
+	to SAT71;
+	name lv_n1_SAT71;
+	configuration SERVICE_DROP_CONFIG;
+	length 59.333663316;
+}
+
+object triplex_line {
+	phases BS;
+	from n22;
+	to SAT30;
+	name lv_n22_SAT30;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.788387452;
+}
+
+object triplex_line {
+	phases BS;
+	from n22;
+	to SAT26;
+	name lv_n22_SAT26;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.788387452;
+}
+
+object triplex_line {
+	phases BS;
+	from n29;
+	to SJ21;
+	name lv_n29_SJ21;
+	configuration SERVICE_DROP_CONFIG;
+	length 67.109910284;
+}
+
+object triplex_line {
+	phases BS;
+	from n29;
+	to SJ22;
+	name lv_n29_SJ22;
+	configuration SERVICE_DROP_CONFIG;
+	length 67.109910284;
+}
+
+object triplex_line {
+	phases BS;
+	from n29;
+	to SJ17;
+	name lv_n29_SJ17;
+	configuration SERVICE_DROP_CONFIG;
+	length 67.109910284;
+}
+
+object triplex_line {
+	phases BS;
+	from n22;
+	to SAT28;
+	name lv_n22_SAT28;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.788387452;
+}
+
+object triplex_line {
+	phases BS;
+	from n22;
+	to QI5;
+	name lv_n22_QI5;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.788387452;
+}
+
+object triplex_line {
+	phases BS;
+	from n29;
+	to SJ20;
+	name lv_n29_SJ20;
+	configuration SERVICE_DROP_CONFIG;
+	length 67.109910284;
+}
+
+object triplex_line {
+	phases BS;
+	from n29;
+	to SJ19;
+	name lv_n29_SJ19;
+	configuration SERVICE_DROP_CONFIG;
+	length 67.109910284;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to n38;
+	name lv_n44_n38;
+	configuration LV_LINE_CONFIG;
+	length 176.889441356;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to n48;
+	name lv_n44_n48;
+	configuration LV_LINE_CONFIG;
+	length 154.981632256;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN7A;
+	name lv_n44_CN7A;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to IM1A;
+	name lv_n44_IM1A;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN8;
+	name lv_n44_CN8;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN5a;
+	name lv_n44_CN5a;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN6;
+	name lv_n44_CN6;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN4;
+	name lv_n44_CN4;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN3;
+	name lv_n44_CN3;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to n45;
+	name lv_n44_n45;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.811682024;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to IM1;
+	name lv_n44_IM1;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN7;
+	name lv_n44_CN7;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN1;
+	name lv_n44_CN1;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to n37;
+	name lv_n38_n37;
+	configuration SERVICE_DROP_CONFIG;
+	length 160.198167856;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to n40;
+	name lv_n38_n40;
+	configuration SERVICE_DROP_CONFIG;
+	length 172.973102648;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to TS1;
+	name lv_n38_TS1;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.604332776;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to CL9;
+	name lv_n38_CL9;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.604332776;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to CL16;
+	name lv_n38_CL16;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.604332776;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to CL14;
+	name lv_n38_CL14;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.604332776;
+}
+
+object triplex_line {
+	phases AS;
+	from n48;
+	to n49;
+	name lv_n48_n49;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.444555804;
+}
+
+object triplex_line {
+	phases AS;
+	from n48;
+	to CN9;
+	name lv_n48_CN9;
+	configuration SERVICE_DROP_CONFIG;
+	length 28.206693816;
+}
+
+object triplex_line {
+	phases AS;
+	from n48;
+	to CN10;
+	name lv_n48_CN10;
+	configuration SERVICE_DROP_CONFIG;
+	length 28.206693816;
+}
+
+object triplex_line {
+	phases AS;
+	from n48;
+	to CN12;
+	name lv_n48_CN12;
+	configuration SERVICE_DROP_CONFIG;
+	length 28.206693816;
+}
+
+object triplex_line {
+	phases AS;
+	from n44;
+	to CN5;
+	name lv_n44_CN5;
+	configuration SERVICE_DROP_CONFIG;
+	length 51.21063156;
+}
+
+object triplex_line {
+	phases AS;
+	from n45;
+	to n46;
+	name lv_n45_n46;
+	configuration SERVICE_DROP_CONFIG;
+	length 119.467523508;
+}
+
+object triplex_line {
+	phases AS;
+	from n45;
+	to IM3;
+	name lv_n45_IM3;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.502625744;
+}
+
+object triplex_line {
+	phases AS;
+	from n45;
+	to IM4;
+	name lv_n45_IM4;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.502625744;
+}
+
+object triplex_line {
+	phases AS;
+	from n45;
+	to IM4A;
+	name lv_n45_IM4A;
+	configuration SERVICE_DROP_CONFIG;
+	length 33.502625744;
+}
+
+object triplex_line {
+	phases AS;
+	from n37;
+	to n36;
+	name lv_n37_n36;
+	configuration SERVICE_DROP_CONFIG;
+	length 160.924873916;
+}
+
+object triplex_line {
+	phases AS;
+	from n37;
+	to CL3A;
+	name lv_n37_CL3A;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.580053984;
+}
+
+object triplex_line {
+	phases AS;
+	from n37;
+	to CL8;
+	name lv_n37_CL8;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.580053984;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to n39;
+	name lv_n38_n39;
+	configuration SERVICE_DROP_CONFIG;
+	length 136.867130364;
+}
+
+object triplex_line {
+	phases AS;
+	from n38;
+	to CL11;
+	name lv_n38_CL11;
+	configuration SERVICE_DROP_CONFIG;
+	length 64.604332776;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to n41;
+	name lv_n40_n41;
+	configuration SERVICE_DROP_CONFIG;
+	length 151.901907748;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL22;
+	name lv_n40_CL22;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL24;
+	name lv_n40_CL24;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL28;
+	name lv_n40_CL28;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL18;
+	name lv_n40_CL18;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL24A;
+	name lv_n40_CL24A;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to n56;
+	name lv_n49_n56;
+	configuration SERVICE_DROP_CONFIG;
+	length 80.097771592;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to n50;
+	name lv_n49_n50;
+	configuration SERVICE_DROP_CONFIG;
+	length 142.65420404;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to CN16A;
+	name lv_n49_CN16A;
+	configuration SERVICE_DROP_CONFIG;
+	length 21.296588608;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to CN15A;
+	name lv_n49_CN15A;
+	configuration SERVICE_DROP_CONFIG;
+	length 21.296588608;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to CN19;
+	name lv_n49_CN19;
+	configuration SERVICE_DROP_CONFIG;
+	length 21.296588608;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to CN14;
+	name lv_n49_CN14;
+	configuration SERVICE_DROP_CONFIG;
+	length 21.296588608;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to CN16;
+	name lv_n49_CN16;
+	configuration SERVICE_DROP_CONFIG;
+	length 21.296588608;
+}
+
+object triplex_line {
+	phases AS;
+	from n48;
+	to CN11;
+	name lv_n48_CN11;
+	configuration SERVICE_DROP_CONFIG;
+	length 28.206693816;
+}
+
+object triplex_line {
+	phases AS;
+	from n48;
+	to CN13;
+	name lv_n48_CN13;
+	configuration SERVICE_DROP_CONFIG;
+	length 28.206693816;
+}
+
+object triplex_line {
+	phases AS;
+	from n46;
+	to n47;
+	name lv_n46_n47;
+	configuration SERVICE_DROP_CONFIG;
+	length 144.359256588;
+}
+
+object triplex_line {
+	phases AS;
+	from n46;
+	to IM7;
+	name lv_n46_IM7;
+	configuration SERVICE_DROP_CONFIG;
+	length 17.365814204;
+}
+
+object triplex_line {
+	phases AS;
+	from n46;
+	to IM8;
+	name lv_n46_IM8;
+	configuration SERVICE_DROP_CONFIG;
+	length 17.365814204;
+}
+
+object triplex_line {
+	phases AS;
+	from n46;
+	to IM6;
+	name lv_n46_IM6;
+	configuration SERVICE_DROP_CONFIG;
+	length 17.365814204;
+}
+
+object triplex_line {
+	phases AS;
+	from n46;
+	to IM10;
+	name lv_n46_IM10;
+	configuration SERVICE_DROP_CONFIG;
+	length 17.365814204;
+}
+
+object triplex_line {
+	phases AS;
+	from n36;
+	to n34;
+	name lv_n36_n34;
+	configuration SERVICE_DROP_CONFIG;
+	length 153.011487836;
+}
+
+object triplex_line {
+	phases AS;
+	from n36;
+	to CL4;
+	name lv_n36_CL4;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.143374916;
+}
+
+object triplex_line {
+	phases AS;
+	from n36;
+	to CL2;
+	name lv_n36_CL2;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.143374916;
+}
+
+object triplex_line {
+	phases AS;
+	from n39;
+	to TS6;
+	name lv_n39_TS6;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.870408868;
+}
+
+object triplex_line {
+	phases AS;
+	from n39;
+	to TS2;
+	name lv_n39_TS2;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.870408868;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL20;
+	name lv_n40_CL20;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n40;
+	to CL17;
+	name lv_n40_CL17;
+	configuration SERVICE_DROP_CONFIG;
+	length 79.600068164;
+}
+
+object triplex_line {
+	phases AS;
+	from n41;
+	to n42;
+	name lv_n41_n42;
+	configuration SERVICE_DROP_CONFIG;
+	length 155.821199212;
+}
+
+object triplex_line {
+	phases AS;
+	from n41;
+	to CL32;
+	name lv_n41_CL32;
+	configuration SERVICE_DROP_CONFIG;
+	length 46.661418816;
+}
+
+object triplex_line {
+	phases AS;
+	from n49;
+	to CN15;
+	name lv_n49_CN15;
+	configuration SERVICE_DROP_CONFIG;
+	length 21.296588608;
+}
+
+object triplex_line {
+	phases AS;
+	from n56;
+	to n57;
+	name lv_n56_n57;
+	configuration SERVICE_DROP_CONFIG;
+	length 129.316277104;
+}
+
+object triplex_line {
+	phases AS;
+	from n56;
+	to CN21;
+	name lv_n56_CN21;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.829070124;
+}
+
+object triplex_line {
+	phases AS;
+	from n56;
+	to CN24;
+	name lv_n56_CN24;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.829070124;
+}
+
+object triplex_line {
+	phases AS;
+	from n56;
+	to SJ2;
+	name lv_n56_SJ2;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.829070124;
+}
+
+object triplex_line {
+	phases AS;
+	from n56;
+	to CN18;
+	name lv_n56_CN18;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.829070124;
+}
+
+object triplex_line {
+	phases AS;
+	from n50;
+	to n51;
+	name lv_n50_n51;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.629925312;
+}
+
+object triplex_line {
+	phases AS;
+	from n50;
+	to DN4A;
+	name lv_n50_DN4A;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.834647872;
+}
+
+object triplex_line {
+	phases AS;
+	from n50;
+	to DN4;
+	name lv_n50_DN4;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.834647872;
+}
+
+object triplex_line {
+	phases AS;
+	from n50;
+	to DN2;
+	name lv_n50_DN2;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.834647872;
+}
+
+object triplex_line {
+	phases AS;
+	from n34;
+	to n32;
+	name lv_n34_n32;
+	configuration SERVICE_DROP_CONFIG;
+	length 147.538718632;
+}
+
+object triplex_line {
+	phases AS;
+	from n34;
+	to QI57;
+	name lv_n34_QI57;
+	configuration SERVICE_DROP_CONFIG;
+	length 59.46030374;
+}
+
+object triplex_line {
+	phases AS;
+	from n34;
+	to CL1;
+	name lv_n34_CL1;
+	configuration SERVICE_DROP_CONFIG;
+	length 59.46030374;
+}
+
+object triplex_line {
+	phases AS;
+	from n34;
+	to QI55;
+	name lv_n34_QI55;
+	configuration SERVICE_DROP_CONFIG;
+	length 59.46030374;
+}
+
+object triplex_line {
+	phases AS;
+	from n36;
+	to CL6;
+	name lv_n36_CL6;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.143374916;
+}
+
+object triplex_line {
+	phases AS;
+	from n39;
+	to TS4;
+	name lv_n39_TS4;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.870408868;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to n43;
+	name lv_n42_n43;
+	configuration SERVICE_DROP_CONFIG;
+	length 144.437012496;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL37B;
+	name lv_n42_CL37B;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL31;
+	name lv_n42_CL31;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL27;
+	name lv_n42_CL27;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL29;
+	name lv_n42_CL29;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL25A;
+	name lv_n42_CL25A;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL29A;
+	name lv_n42_CL29A;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n56;
+	to CN20;
+	name lv_n56_CN20;
+	configuration SERVICE_DROP_CONFIG;
+	length 58.829070124;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to n30;
+	name lv_n57_n30;
+	configuration SERVICE_DROP_CONFIG;
+	length 109.4078119;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ7A;
+	name lv_n57_SJ7A;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ6A;
+	name lv_n57_SJ6A;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ3;
+	name lv_n57_SJ3;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ6;
+	name lv_n57_SJ6;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ5;
+	name lv_n57_SJ5;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ8A;
+	name lv_n57_SJ8A;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to n52;
+	name lv_n51_n52;
+	configuration SERVICE_DROP_CONFIG;
+	length 130.066933296;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to MR1;
+	name lv_n51_MR1;
+	configuration SERVICE_DROP_CONFIG;
+	length 42.9954082;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to MR3;
+	name lv_n51_MR3;
+	configuration SERVICE_DROP_CONFIG;
+	length 42.9954082;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to DN3B;
+	name lv_n51_DN3B;
+	configuration SERVICE_DROP_CONFIG;
+	length 42.9954082;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to DN5;
+	name lv_n51_DN5;
+	configuration SERVICE_DROP_CONFIG;
+	length 42.9954082;
+}
+
+object triplex_line {
+	phases AS;
+	from n32;
+	to n31;
+	name lv_n32_n31;
+	configuration SERVICE_DROP_CONFIG;
+	length 135.790358676;
+}
+
+object triplex_line {
+	phases AS;
+	from n32;
+	to QI49;
+	name lv_n32_QI49;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.143046832;
+}
+
+object triplex_line {
+	phases AS;
+	from n32;
+	to QI51;
+	name lv_n32_QI51;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.143046832;
+}
+
+object triplex_line {
+	phases AS;
+	from n34;
+	to n35;
+	name lv_n34_n35;
+	configuration SERVICE_DROP_CONFIG;
+	length 162.182091804;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL27A;
+	name lv_n42_CL27A;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL25;
+	name lv_n42_CL25;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n43;
+	to CL39;
+	name lv_n43_CL39;
+	configuration SERVICE_DROP_CONFIG;
+	length 97.408467684;
+}
+
+object triplex_line {
+	phases AS;
+	from n43;
+	to CL43;
+	name lv_n43_CL43;
+	configuration SERVICE_DROP_CONFIG;
+	length 97.408467684;
+}
+
+object triplex_line {
+	phases AS;
+	from n42;
+	to CL37C;
+	name lv_n42_CL37C;
+	configuration SERVICE_DROP_CONFIG;
+	length 126.487208772;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ8;
+	name lv_n57_SJ8;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ1;
+	name lv_n57_SJ1;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to n58;
+	name lv_n30_n58;
+	configuration SERVICE_DROP_CONFIG;
+	length 141.902563596;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to TV10;
+	name lv_n30_TV10;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ16A;
+	name lv_n30_SJ16A;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to TV8;
+	name lv_n30_TV8;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ11;
+	name lv_n30_SJ11;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ9;
+	name lv_n30_SJ9;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ14;
+	name lv_n30_SJ14;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ10;
+	name lv_n30_SJ10;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to TV6;
+	name lv_n30_TV6;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n57;
+	to SJ7;
+	name lv_n57_SJ7;
+	configuration SERVICE_DROP_CONFIG;
+	length 31.100066612;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to DN3A;
+	name lv_n51_DN3A;
+	configuration SERVICE_DROP_CONFIG;
+	length 42.9954082;
+}
+
+object triplex_line {
+	phases AS;
+	from n51;
+	to DN3;
+	name lv_n51_DN3;
+	configuration SERVICE_DROP_CONFIG;
+	length 42.9954082;
+}
+
+object triplex_line {
+	phases AS;
+	from n52;
+	to n53;
+	name lv_n52_n53;
+	configuration SERVICE_DROP_CONFIG;
+	length 78.869425096;
+}
+
+object triplex_line {
+	phases AS;
+	from n52;
+	to MR9;
+	name lv_n52_MR9;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.69914854;
+}
+
+object triplex_line {
+	phases AS;
+	from n52;
+	to MR2;
+	name lv_n52_MR2;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.69914854;
+}
+
+object triplex_line {
+	phases AS;
+	from n52;
+	to MR2A;
+	name lv_n52_MR2A;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.69914854;
+}
+
+object triplex_line {
+	phases AS;
+	from n52;
+	to MR5;
+	name lv_n52_MR5;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.69914854;
+}
+
+object triplex_line {
+	phases AS;
+	from n31;
+	to QI41;
+	name lv_n31_QI41;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.724738132;
+}
+
+object triplex_line {
+	phases AS;
+	from n32;
+	to n33;
+	name lv_n32_n33;
+	configuration SERVICE_DROP_CONFIG;
+	length 62.820868152;
+}
+
+object triplex_line {
+	phases AS;
+	from n32;
+	to QI53;
+	name lv_n32_QI53;
+	configuration SERVICE_DROP_CONFIG;
+	length 69.143046832;
+}
+
+object triplex_line {
+	phases AS;
+	from n35;
+	to QI63;
+	name lv_n35_QI63;
+	configuration SERVICE_DROP_CONFIG;
+	length 40.689961932;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to TV10A;
+	name lv_n30_TV10A;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ16;
+	name lv_n30_SJ16;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n58;
+	to n59;
+	name lv_n58_n59;
+	configuration SERVICE_DROP_CONFIG;
+	length 127.384190428;
+}
+
+object triplex_line {
+	phases AS;
+	from n58;
+	to TV11;
+	name lv_n58_TV11;
+	configuration SERVICE_DROP_CONFIG;
+	length 52.372377004;
+}
+
+object triplex_line {
+	phases AS;
+	from n58;
+	to TV2;
+	name lv_n58_TV2;
+	configuration SERVICE_DROP_CONFIG;
+	length 52.372377004;
+}
+
+object triplex_line {
+	phases AS;
+	from n58;
+	to TV9;
+	name lv_n58_TV9;
+	configuration SERVICE_DROP_CONFIG;
+	length 52.372377004;
+}
+
+object triplex_line {
+	phases AS;
+	from n58;
+	to TV4;
+	name lv_n58_TV4;
+	configuration SERVICE_DROP_CONFIG;
+	length 52.372377004;
+}
+
+object triplex_line {
+	phases AS;
+	from n30;
+	to SJ12;
+	name lv_n30_SJ12;
+	configuration SERVICE_DROP_CONFIG;
+	length 43.994752064;
+}
+
+object triplex_line {
+	phases AS;
+	from n52;
+	to MR4;
+	name lv_n52_MR4;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.69914854;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to n54;
+	name lv_n53_n54;
+	configuration SERVICE_DROP_CONFIG;
+	length 123.1873399;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to MR12A;
+	name lv_n53_MR12A;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.958663048;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to MR14;
+	name lv_n53_MR14;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.958663048;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to MR13;
+	name lv_n53_MR13;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.958663048;
+}
+
+object triplex_line {
+	phases AS;
+	from n33;
+	to QI47;
+	name lv_n33_QI47;
+	configuration SERVICE_DROP_CONFIG;
+	length 94.531499088;
+}
+
+object triplex_line {
+	phases AS;
+	from n33;
+	to IM13A;
+	name lv_n33_IM13A;
+	configuration SERVICE_DROP_CONFIG;
+	length 94.531499088;
+}
+
+object triplex_line {
+	phases AS;
+	from n59;
+	to TV5;
+	name lv_n59_TV5;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.252298164;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to MR8;
+	name lv_n53_MR8;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.958663048;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to MR15;
+	name lv_n53_MR15;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.958663048;
+}
+
+object triplex_line {
+	phases AS;
+	from n54;
+	to n55;
+	name lv_n54_n55;
+	configuration SERVICE_DROP_CONFIG;
+	length 136.999020132;
+}
+
+object triplex_line {
+	phases AS;
+	from n54;
+	to MR22;
+	name lv_n54_MR22;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.793309288;
+}
+
+object triplex_line {
+	phases AS;
+	from n54;
+	to MR18;
+	name lv_n54_MR18;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.793309288;
+}
+
+object triplex_line {
+	phases AS;
+	from n54;
+	to MR20A;
+	name lv_n54_MR20A;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.793309288;
+}
+
+object triplex_line {
+	phases AS;
+	from n53;
+	to MR11;
+	name lv_n53_MR11;
+	configuration SERVICE_DROP_CONFIG;
+	length 50.958663048;
+}
+
+object triplex_line {
+	phases AS;
+	from n59;
+	to TV7;
+	name lv_n59_TV7;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.252298164;
+}
+
+object triplex_line {
+	phases AS;
+	from n55;
+	to MR26A;
+	name lv_n55_MR26A;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.481628848;
+}
+
+object triplex_line {
+	phases AS;
+	from n55;
+	to BC3;
+	name lv_n55_BC3;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.481628848;
+}
+
+object triplex_line {
+	phases AS;
+	from n55;
+	to MR23;
+	name lv_n55_MR23;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.481628848;
+}
+
+object triplex_line {
+	phases AS;
+	from n55;
+	to MR21A;
+	name lv_n55_MR21A;
+	configuration SERVICE_DROP_CONFIG;
+	length 48.481628848;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to n87;
+	name lv_n88_n87;
+	configuration LV_LINE_CONFIG;
+	length 134.668967564;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to n95;
+	name lv_n88_n95;
+	configuration LV_LINE_CONFIG;
+	length 126.292326876;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to AV4A;
+	name lv_n88_AV4A;
+	configuration SERVICE_DROP_CONFIG;
+	length 38.996720408;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to DII5;
+	name lv_n88_DII5;
+	configuration SERVICE_DROP_CONFIG;
+	length 38.996720408;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to DII3;
+	name lv_n88_DII3;
+	configuration SERVICE_DROP_CONFIG;
+	length 38.996720408;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to AV2;
+	name lv_n88_AV2;
+	configuration SERVICE_DROP_CONFIG;
+	length 38.996720408;
+}
+
+object triplex_line {
+	phases CS;
+	from n87;
+	to n86;
+	name lv_n87_n86;
+	configuration SERVICE_DROP_CONFIG;
+	length 120.125660012;
+}
+
+object triplex_line {
+	phases CS;
+	from n88;
+	to n89;
+	name lv_n88_n89;
+	configuration SERVICE_DROP_CONFIG;
+	length 105.546919388;
+}
+
+object triplex_line {
+	phases CS;
+	from n95;
+	to n96;
+	name lv_n95_n96;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.099741984;
+}
+
+object triplex_line {
+	phases CS;
+	from n95;
+	to DII11;
+	name lv_n95_DII11;
+	configuration SERVICE_DROP_CONFIG;
+	length 111.956040328;
+}
+
+object triplex_line {
+	phases CS;
+	from n95;
+	to DII20;
+	name lv_n95_DII20;
+	configuration SERVICE_DROP_CONFIG;
+	length 111.956040328;
+}
+
+object triplex_line {
+	phases CS;
+	from n95;
+	to DII9;
+	name lv_n95_DII9;
+	configuration SERVICE_DROP_CONFIG;
+	length 111.956040328;
+}
+
+object triplex_line {
+	phases CS;
+	from n86;
+	to DII2;
+	name lv_n86_DII2;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.1922594;
+}
+
+object triplex_line {
+	phases CS;
+	from n89;
+	to n90;
+	name lv_n89_n90;
+	configuration SERVICE_DROP_CONFIG;
+	length 139.835634396;
+}
+
+object triplex_line {
+	phases CS;
+	from n89;
+	to AV10;
+	name lv_n89_AV10;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.780185928;
+}
+
+object triplex_line {
+	phases CS;
+	from n89;
+	to AV8;
+	name lv_n89_AV8;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.780185928;
+}
+
+object triplex_line {
+	phases CS;
+	from n89;
+	to AV6;
+	name lv_n89_AV6;
+	configuration SERVICE_DROP_CONFIG;
+	length 68.780185928;
+}
+
+object triplex_line {
+	phases CS;
+	from n95;
+	to DII13;
+	name lv_n95_DII13;
+	configuration SERVICE_DROP_CONFIG;
+	length 111.956040328;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to n97;
+	name lv_n96_n97;
+	configuration SERVICE_DROP_CONFIG;
+	length 169.973102552;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII19;
+	name lv_n96_DII19;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII28;
+	name lv_n96_DII28;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII32;
+	name lv_n96_DII32;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII30;
+	name lv_n96_DII30;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII22;
+	name lv_n96_DII22;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII19A;
+	name lv_n96_DII19A;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n90;
+	to n91;
+	name lv_n90_n91;
+	configuration SERVICE_DROP_CONFIG;
+	length 135.78904634;
+}
+
+object triplex_line {
+	phases CS;
+	from n90;
+	to AV22;
+	name lv_n90_AV22;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.812666084;
+}
+
+object triplex_line {
+	phases CS;
+	from n90;
+	to AV18A;
+	name lv_n90_AV18A;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.812666084;
+}
+
+object triplex_line {
+	phases CS;
+	from n90;
+	to AV18;
+	name lv_n90_AV18;
+	configuration SERVICE_DROP_CONFIG;
+	length 63.812666084;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII17;
+	name lv_n96_DII17;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n96;
+	to DII22A;
+	name lv_n96_DII22A;
+	configuration SERVICE_DROP_CONFIG;
+	length 83.378283508;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to n98;
+	name lv_n97_n98;
+	configuration SERVICE_DROP_CONFIG;
+	length 158.78117306;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII23B;
+	name lv_n97_DII23B;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII21;
+	name lv_n97_DII21;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII36;
+	name lv_n97_DII36;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII42A;
+	name lv_n97_DII42A;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII42;
+	name lv_n97_DII42;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n91;
+	to n92;
+	name lv_n91_n92;
+	configuration SERVICE_DROP_CONFIG;
+	length 140.39206486;
+}
+
+object triplex_line {
+	phases CS;
+	from n91;
+	to AVII4;
+	name lv_n91_AVII4;
+	configuration SERVICE_DROP_CONFIG;
+	length 77.207023468;
+}
+
+object triplex_line {
+	phases CS;
+	from n91;
+	to AVII2;
+	name lv_n91_AVII2;
+	configuration SERVICE_DROP_CONFIG;
+	length 77.207023468;
+}
+
+object triplex_line {
+	phases CS;
+	from n91;
+	to AV1;
+	name lv_n91_AV1;
+	configuration SERVICE_DROP_CONFIG;
+	length 77.207023468;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII23A;
+	name lv_n97_DII23A;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII23;
+	name lv_n97_DII23;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n97;
+	to DII40;
+	name lv_n97_DII40;
+	configuration SERVICE_DROP_CONFIG;
+	length 65.295605764;
+}
+
+object triplex_line {
+	phases CS;
+	from n98;
+	to n99;
+	name lv_n98_n99;
+	configuration SERVICE_DROP_CONFIG;
+	length 137.785765564;
+}
+
+object triplex_line {
+	phases CS;
+	from n98;
+	to DII25;
+	name lv_n98_DII25;
+	configuration SERVICE_DROP_CONFIG;
+	length 57.098755108;
+}
+
+object triplex_line {
+	phases CS;
+	from n98;
+	to DII29;
+	name lv_n98_DII29;
+	configuration SERVICE_DROP_CONFIG;
+	length 57.098755108;
+}
+
+object triplex_line {
+	phases CS;
+	from n98;
+	to DII46;
+	name lv_n98_DII46;
+	configuration SERVICE_DROP_CONFIG;
+	length 57.098755108;
+}
+
+object triplex_line {
+	phases CS;
+	from n91;
+	to n93;
+	name lv_n91_n93;
+	configuration SERVICE_DROP_CONFIG;
+	length 127.7313033;
+}
+
+object triplex_line {
+	phases CS;
+	from n92;
+	to AVII6;
+	name lv_n92_AVII6;
+	configuration SERVICE_DROP_CONFIG;
+	length 73.042653256;
+}
+
+object triplex_line {
+	phases CS;
+	from n98;
+	to DII27;
+	name lv_n98_DII27;
+	configuration SERVICE_DROP_CONFIG;
+	length 57.098755108;
+}
+
+object triplex_line {
+	phases CS;
+	from n99;
+	to n100;
+	name lv_n99_n100;
+	configuration SERVICE_DROP_CONFIG;
+	length 130.82841626;
+}
+
+object triplex_line {
+	phases CS;
+	from n99;
+	to DII50;
+	name lv_n99_DII50;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.402887728;
+}
+
+object triplex_line {
+	phases CS;
+	from n99;
+	to DII33;
+	name lv_n99_DII33;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.402887728;
+}
+
+object triplex_line {
+	phases CS;
+	from n99;
+	to DII48;
+	name lv_n99_DII48;
+	configuration SERVICE_DROP_CONFIG;
+	length 18.402887728;
+}
+
+object triplex_line {
+	phases CS;
+	from n93;
+	to n94;
+	name lv_n93_n94;
+	configuration SERVICE_DROP_CONFIG;
+	length 116.913389568;
+}
+
+object triplex_line {
+	phases CS;
+	from n93;
+	to AV26;
+	name lv_n93_AV26;
+	configuration SERVICE_DROP_CONFIG;
+	length 36.258859428;
+}
+
+object triplex_line {
+	phases CS;
+	from n93;
+	to AV7A;
+	name lv_n93_AV7A;
+	configuration SERVICE_DROP_CONFIG;
+	length 36.258859428;
+}
+
+object triplex_line {
+	phases CS;
+	from n93;
+	to AV5;
+	name lv_n93_AV5;
+	configuration SERVICE_DROP_CONFIG;
+	length 36.258859428;
+}
+
+object triplex_line {
+	phases CS;
+	from n92;
+	to AVII8;
+	name lv_n92_AVII8;
+	configuration SERVICE_DROP_CONFIG;
+	length 73.042653256;
+}
+
+object triplex_line {
+	phases CS;
+	from n100;
+	to n101;
+	name lv_n100_n101;
+	configuration SERVICE_DROP_CONFIG;
+	length 183.588588552;
+}
+
+object triplex_line {
+	phases CS;
+	from n100;
+	to KR2;
+	name lv_n100_KR2;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.226708316;
+}
+
+object triplex_line {
+	phases CS;
+	from n93;
+	to AV24;
+	name lv_n93_AV24;
+	configuration SERVICE_DROP_CONFIG;
+	length 36.258859428;
+}
+
+object triplex_line {
+	phases CS;
+	from n93;
+	to AV7;
+	name lv_n93_AV7;
+	configuration SERVICE_DROP_CONFIG;
+	length 36.258859428;
+}
+
+object triplex_line {
+	phases CS;
+	from n94;
+	to AV9;
+	name lv_n94_AV9;
+	configuration SERVICE_DROP_CONFIG;
+	length 53.493440032;
+}
+
+object triplex_line {
+	phases CS;
+	from n100;
+	to KR3;
+	name lv_n100_KR3;
+	configuration SERVICE_DROP_CONFIG;
+	length 71.226708316;
+}
+
+object triplex_line {
+	phases CS;
+	from n101;
+	to n102;
+	name lv_n101_n102;
+	configuration SERVICE_DROP_CONFIG;
+	length 153.07743272;
+}
+
+object triplex_line {
+	phases CS;
+	from n101;
+	to DII39A;
+	name lv_n101_DII39A;
+	configuration SERVICE_DROP_CONFIG;
+	length 75.945212404;
+}
+
+object triplex_line {
+	phases CS;
+	from n101;
+	to DII52;
+	name lv_n101_DII52;
+	configuration SERVICE_DROP_CONFIG;
+	length 75.945212404;
+}
+
+object triplex_line {
+	phases CS;
+	from n101;
+	to DII37;
+	name lv_n101_DII37;
+	configuration SERVICE_DROP_CONFIG;
+	length 75.945212404;
+}
+
+object triplex_line {
+	phases CS;
+	from n94;
+	to AV32;
+	name lv_n94_AV32;
+	configuration SERVICE_DROP_CONFIG;
+	length 53.493440032;
+}
+
+object triplex_line {
+	phases CS;
+	from n101;
+	to DII54A;
+	name lv_n101_DII54A;
+	configuration SERVICE_DROP_CONFIG;
+	length 75.945212404;
+}
+
+object triplex_line {
+	phases CS;
+	from n101;
+	to DII39;
+	name lv_n101_DII39;
+	configuration SERVICE_DROP_CONFIG;
+	length 75.945212404;
+}
+
+object triplex_line {
+	phases CS;
+	from n102;
+	to n103;
+	name lv_n102_n103;
+	configuration SERVICE_DROP_CONFIG;
+	length 149.656828936;
+}
+
+object triplex_line {
+	phases CS;
+	from n102;
+	to DII58;
+	name lv_n102_DII58;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.093833592;
+}
+
+object triplex_line {
+	phases CS;
+	from n102;
+	to DII45;
+	name lv_n102_DII45;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.093833592;
+}
+
+object triplex_line {
+	phases CS;
+	from n102;
+	to DII56;
+	name lv_n102_DII56;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.093833592;
+}
+
+object triplex_line {
+	phases CS;
+	from n103;
+	to DII62;
+	name lv_n103_DII62;
+	configuration SERVICE_DROP_CONFIG;
+	length 39.501641684;
+}
+
+object triplex_line {
+	phases CS;
+	from n102;
+	to DII56A;
+	name lv_n102_DII56A;
+	configuration SERVICE_DROP_CONFIG;
+	length 49.093833592;
+}
+
+object overhead_line {
+	phases ABCN;
+	from n107;
+	to M85;
+	name mv_n107_M85;
+	configuration MV_LINE_CONFIG;
+	length 127.605319044;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M85;
+	to M84;
+	name mv_M85_M84;
+	configuration MV_LINE_CONFIG;
+	length 227.448826176;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M84;
+	to M83;
+	name mv_M84_M83;
+	configuration MV_LINE_CONFIG;
+	length 219.749678948;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M83;
+	to M82;
+	name mv_M83_M82;
+	configuration MV_LINE_CONFIG;
+	length 201.459324032;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M81;
+	to M82;
+	name mv_M81_M82;
+	configuration MV_LINE_CONFIG;
+	length 189.561357772;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M81;
+	to M80;
+	name mv_M81_M80;
+	configuration MV_LINE_CONFIG;
+	length 207.771332108;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M80;
+	to TR77;
+	name mv_M80_TR77;
+	configuration MV_LINE_CONFIG;
+	length 165.29035962;
+}
+
+object overhead_line {
+	phases ABCN;
+	from TR77;
+	to M76;
+	name mv_TR77_M76;
+	configuration MV_LINE_CONFIG;
+	length 148.322511308;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M76;
+	to M67;
+	name mv_M76_M67;
+	configuration MV_LINE_CONFIG;
+	length 204.583011796;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M66;
+	to M67;
+	name mv_M66_M67;
+	configuration MV_LINE_CONFIG;
+	length 162.671265048;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M65;
+	to M66;
+	name mv_M65_M66;
+	configuration MV_LINE_CONFIG;
+	length 171.53707898;
+}
+
+object overhead_line {
+	phases ABCN;
+	from TR88;
+	to M87;
+	name mv_TR88_M87;
+	configuration MV_LINE_CONFIG;
+	length 134.668967564;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M87;
+	to M86;
+	name mv_M87_M86;
+	configuration MV_LINE_CONFIG;
+	length 120.125660012;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M86;
+	to M65;
+	name mv_M86_M65;
+	configuration MV_LINE_CONFIG;
+	length 161.46982144;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M65;
+	to M12;
+	name mv_M65_M12;
+	configuration MV_LINE_CONFIG;
+	length 99.991473016;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M12;
+	to M13;
+	name mv_M12_M13;
+	configuration MV_LINE_CONFIG;
+	length 118.990489372;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M13;
+	to TR14;
+	name mv_M13_TR14;
+	configuration MV_LINE_CONFIG;
+	length 118.909780708;
+}
+
+object overhead_line {
+	phases ABCN;
+	from TR14;
+	to M56;
+	name mv_TR14_M56;
+	configuration MV_LINE_CONFIG;
+	length 164.616803168;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M56;
+	to M48;
+	name mv_M56_M48;
+	configuration MV_LINE_CONFIG;
+	length 131.190620996;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M48;
+	to TR44;
+	name mv_M48_TR44;
+	configuration MV_LINE_CONFIG;
+	length 154.981632256;
+}
+
+object overhead_line {
+	phases ABCN;
+	from TR44;
+	to M38;
+	name mv_TR44_M38;
+	configuration MV_LINE_CONFIG;
+	length 176.889441356;
+}
+
+object overhead_line {
+	phases ABCN;
+	from M85;
+	to TR104;
+	name mv_M85_TR104;
+	configuration MV_LINE_CONFIG;
+	length 207.701122132;
+}
+
+// nodes
+object triplex_node {
+	name DN24;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV7A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN36;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN34;
+	phases BS;
+	power_1 292.000+200.048j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN32;
+	phases BS;
+	power_1 6.000+10.501j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI23A;
+	phases BS;
+	power_1 6.000+6.861j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN18B;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n62;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV7;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN8;
+	phases BS;
+	power_1 10.000+10.170j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n66;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN4;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN5;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN6;
+	phases BS;
+	power_1 10.000+5.509j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN1;
+	phases BS;
+	power_1 2.000+3.798j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN2;
+	phases BS;
+	power_1 4.000+5.348j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n82;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n83;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n80;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n81;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG18;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n84;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN2B;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV9A;
+	phases BS;
+	power_1 116.000+100.568j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN22;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN23;
+	phases BS;
+	power_1 10.000+4.470j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV17A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN26;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI3A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN11A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG26;
+	phases BS;
+	power_1 2.000+5.056j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG24;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG22;
+	phases BS;
+	power_1 10.000+4.672j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI21A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG20;
+	phases BS;
+	power_1 8.000+4.919j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG28;
+	phases BS;
+	power_1 10.000+5.215j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG2;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG4;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG6;
+	phases BS;
+	power_1 6.000+6.427j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV17;
+	phases BS;
+	power_1 10.000+5.663j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV15;
+	phases BS;
+	power_1 6.000+11.885j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI23;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI21;
+	phases BS;
+	power_1 8.000+7.534j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n60;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n61;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG10;
+	phases BS;
+	power_1 0.000+3.291j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n63;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n64;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n65;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN41;
+	phases BS;
+	power_1 108.000+87.336j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n67;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n68;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n69;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN14;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN12;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN10;
+	phases BS;
+	power_1 4.000+11.715j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IN11;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV3;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV25;
+	phases BS;
+	power_1 162.000+153.203j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV21;
+	phases BS;
+	power_1 8.000+6.131j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN7;
+	phases BS;
+	power_1 6.000+6.852j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN6;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN9A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN9;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI17;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI15;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI12;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI10;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI11;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN11;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN13;
+	phases BS;
+	power_1 4.000+5.395j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN12;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV9;
+	phases BS;
+	power_1 8.000+9.499j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN18;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV31;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV33;
+	phases BS;
+	power_1 6.000+11.974j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n12;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC1;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC2;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC23;
+	phases BS;
+	power_1 10.000+5.628j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN12A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC21;
+	phases BS;
+	power_1 0.000+5.165j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC29;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV13;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV12;
+	phases BS;
+	power_1 2.000+6.802j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV14;
+	phases BS;
+	power_1 10.000+5.189j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV16;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC9C;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV13A;
+	phases BS;
+	power_1 12.000+5.151j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG18A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC17;
+	phases BS;
+	power_1 166.000+105.260j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC15;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n77;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n76;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n75;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n74;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n73;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n72;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n71;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n70;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n79;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n78;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name RG26A;
+	phases BS;
+	power_1 8.000+10.302j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name NV23A;
+	phases BS;
+	power_1 10.000+6.175j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI9;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI4;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI5;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI7;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI3;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG9;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG10;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG11;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG12;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII80;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG1;
+	phases CS;
+	power_1 130.000+116.240j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG4;
+	phases CS;
+	power_1 8.000+5.476j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DG5;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n85;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n106;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n104;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n105;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN6A;
+	phases BS;
+	power_1 212.000+138.885j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT71;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT41A;
+	phases BS;
+	power_1 8.000+5.113j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT65A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n24;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI21;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI23;
+	phases BS;
+	power_1 8.000+5.396j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n20;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n21;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT21;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n23;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI29;
+	phases BS;
+	power_1 2.000+2.612j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n28;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT47;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT29;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT28;
+	phases BS;
+	power_1 4.000+3.002j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN18;
+	phases BS;
+	power_1 4.000+3.696j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN15;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN10;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN12;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN37;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC14;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN35;
+	phases BS;
+	power_1 14.000+11.352j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN30;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC11;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT20;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN32;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN39;
+	phases BS;
+	power_1 2.000+3.787j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI2A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI2B;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI9;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI8;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT2A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI5;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI4;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI7;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI6;
+	phases BS;
+	power_1 10.000+4.745j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT30;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT31;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI37;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT35;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI33A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI39;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT31A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ27;
+	phases BS;
+	power_1 0.000+1.179j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ26;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ21;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ20;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ23;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ22;
+	phases BS;
+	power_1 22.000+14.992j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ29;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ28;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN26;
+	phases BS;
+	power_1 0.000+0.954j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN29;
+	phases BS;
+	power_1 0.000+0.712j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN28;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT53B;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI1A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT45;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n27;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n3;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n7;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT27;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n26;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT24;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI24;
+	phases BS;
+	power_1 10.000+5.131j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ35;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI19;
+	phases BS;
+	power_1 10.000+5.460j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n22;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI11;
+	phases BS;
+	power_1 8.000+7.152j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI13;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI27;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI15;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI14;
+	phases BS;
+	power_1 10.000+5.811j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI17;
+	phases BS;
+	power_1 4.000+5.550j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI16;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI4A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT53;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT51;
+	phases BS;
+	power_1 6.000+10.781j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n29;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI20;
+	phases BS;
+	power_1 10.000+5.663j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT5A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT63;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n2;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT67;
+	phases BS;
+	power_1 0.000+1.422j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n6;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT69;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN29A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ17;
+	phases BS;
+	power_1 0.000+3.303j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI22;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n8;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT69A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n11;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n10;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n13;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n15;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n14;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n17;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n16;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n18;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN25;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN27;
+	phases BS;
+	power_1 6.000+7.366j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN26;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN21;
+	phases BS;
+	power_1 68.000+39.376j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN20;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN23;
+	phases BS;
+	power_1 0.000+2.835j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN22;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN29;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN28;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT2;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT3;
+	phases BS;
+	power_1 0.000+0.951j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT4;
+	phases BS;
+	power_1 10.000+17.387j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT26;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n1;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC4;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC5;
+	phases BS;
+	power_1 6.000+5.980j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC6;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC1;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name JC3;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT17A;
+	phases BS;
+	power_1 0.000+2.163j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN36;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN34;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN35;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n5;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN33;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN30;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN31;
+	phases BS;
+	power_1 0.000+3.549j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n9;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n4 ;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN6;
+	phases BS;
+	power_1 6.000+5.779j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN7;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN4;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN2;
+	phases BS;
+	power_1 116.000+105.151j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN1;
+	phases BS;
+	power_1 0.000+0.237j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ33;
+	phases BS;
+	power_1 10.000+5.393j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ30;
+	phases BS;
+	power_1 152.000+188.074j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ31;
+	phases BS;
+	power_1 134.000+188.338j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ37;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ34;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAN9;
+	phases BS;
+	power_1 58.000+35.088j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT10;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT37A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT18A;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT18;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT19;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT12;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT13;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DI6;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT11;
+	phases BS;
+	power_1 6.000+10.196j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT16;
+	phases BS;
+	power_1 10.000+5.602j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SAT15;
+	phases BS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL27A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL37B;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL37C;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN8;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN9;
+	phases AS;
+	power_1 6.000+12.021j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM1A;
+	phases AS;
+	power_1 0.000+0.962j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR8;
+	phases AS;
+	power_1 6.000+7.756j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR9;
+	phases AS;
+	power_1 10.000+6.642j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR4;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR5;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR1;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR2;
+	phases AS;
+	power_1 4.000+2.666j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR3;
+	phases AS;
+	power_1 10.000+6.202j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ6A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR18;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR14;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR15;
+	phases AS;
+	power_1 8.000+11.592j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR13;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR11;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL43;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN16A;
+	phases AS;
+	power_1 0.000+2.635j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN4A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR26A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n59;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n58;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV7;
+	phases AS;
+	power_1 10.000+2.392j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n55;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n54;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n57;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n56;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n51;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n50;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n53;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n52;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV2;
+	phases AS;
+	power_1 14.000+24.552j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN21;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL31;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL32;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN5a;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL39;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM10;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN3;
+	phases AS;
+	power_1 10.000+5.610j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN3B;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN3A;
+	phases AS;
+	power_1 0.000+5.556j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL22;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL20;
+	phases AS;
+	power_1 0.000+0.721j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL27;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL25;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL24;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL29;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL28;
+	phases AS;
+	power_1 0.000+4.095j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ9;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n39;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n38;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n33;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n32;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n31;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n30;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n37;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n36;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n35;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n34;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL3A;
+	phases AS;
+	power_1 10.000+5.276j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TS6;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TS4;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TS2;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TS1;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL18;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN20;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL16;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL17;
+	phases AS;
+	power_1 0.000+2.169j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL14;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL25A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL11;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN24;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN5;
+	phases AS;
+	power_1 0.000+2.651j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ8;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN7A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR21A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ2;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ3;
+	phases AS;
+	power_1 4.000+9.827j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ1;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ6;
+	phases AS;
+	power_1 0.000+0.480j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ7;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ16A;
+	phases AS;
+	power_1 0.000+1.653j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ5;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM1;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN4;
+	phases AS;
+	power_1 8.000+6.149j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM3;
+	phases AS;
+	power_1 0.000+5.063j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL8;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL9;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM7;
+	phases AS;
+	power_1 0.000+2.649j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM6;
+	phases AS;
+	power_1 10.000+19.698j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL4;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM8;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL6;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL1;
+	phases AS;
+	power_1 2.000+8.122j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL2;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM4;
+	phases AS;
+	power_1 6.000+11.495j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV9;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV8;
+	phases AS;
+	power_1 2.000+3.804j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ14;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV4;
+	phases AS;
+	power_1 14.000+27.209j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ16;
+	phases AS;
+	power_1 6.000+11.794j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DN2;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ10;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL24A;
+	phases AS;
+	power_1 10.000+7.407j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ12;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ7A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI53;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM4A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI63;
+	phases AS;
+	power_1 10.000+6.944j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name BC3;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR2A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR12A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN15A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV11;
+	phases AS;
+	power_1 6.000+10.622j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV10;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN6;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN7;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN4;
+	phases AS;
+	power_1 6.000+11.492j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN5;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN3;
+	phases AS;
+	power_1 10.000+18.664j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n48;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN1;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n46;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n47;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n44;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n45;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n42;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n43;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n40;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n41;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV5;
+	phases AS;
+	power_1 0.000+2.630j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI49;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI41;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI47;
+	phases AS;
+	power_1 8.000+8.249j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV6;
+	phases AS;
+	power_1 0.000+3.599j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ11;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN18;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN19;
+	phases AS;
+	power_1 148.000+39.181j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN10;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN11;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN12;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN13;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN14;
+	phases AS;
+	power_1 94.000+58.162j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN15;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CN16;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI55;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR20A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI57;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name QI51;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name SJ8A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name CL29A;
+	phases AS;
+	power_1 4.000+3.461j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n49;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR23;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name MR22;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name TV10A;
+	phases AS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name IM13A;
+	phases AS;
+	power_1 50.000+75.580j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII50;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV26;
+	phases CS;
+	power_1 10.000+4.342j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV8;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV18;
+	phases CS;
+	power_1 2.000+3.224j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII56;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII42A;
+	phases CS;
+	power_1 10.000+5.299j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII58;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV5;
+	phases CS;
+	power_1 4.000+2.545j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV6;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV24;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV1;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV2;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII36;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n102;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n88;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n89;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII32;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII19;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII30;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n103;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n100;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII54A;
+	phases CS;
+	power_1 0.000+0.237j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV7A;
+	phases CS;
+	power_1 6.000+4.202j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII17;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n86;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII11;
+	phases CS;
+	power_1 2.000+4.311j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV10;
+	phases CS;
+	power_1 0.000+11.591j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII13;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII5;
+	phases CS;
+	power_1 10.000+18.761j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV4A;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII3;
+	phases CS;
+	power_1 24.000+14.264j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name KR2;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII29;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AVII6;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII9;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII22A;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n101;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII39A;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII39;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name KR3;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n87;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII46;
+	phases CS;
+	power_1 10.000+5.817j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII45;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV7;
+	phases CS;
+	power_1 8.000+5.113j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII42;
+	phases CS;
+	power_1 18.000+17.156j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII40;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII62;
+	phases CS;
+	power_1 6.000+5.311j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n94;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII56A;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII48;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n99;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV22;
+	phases CS;
+	power_1 4.000+2.978j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII27;
+	phases CS;
+	power_1 6.000+13.120j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII21;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII20;
+	phases CS;
+	power_1 6.000+6.423j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII23;
+	phases CS;
+	power_1 2.000+1.262j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII22;
+	phases CS;
+	power_1 0.000+1.650j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n91;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n90;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n93;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n92;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n95;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII28;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n97;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n96;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII25;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name n98;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII37;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV32;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII2;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AVII4;
+	phases CS;
+	power_1 10.000+5.848j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII52;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV18A;
+	phases CS;
+	power_1 2.000+5.063j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AV9;
+	phases CS;
+	power_1 4.000+8.066j;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AVII2;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII19A;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name AVII8;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII23B;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII23A;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object triplex_node {
+	name DII33;
+	phases CS;
+	power_1 0.000;
+	nominal_voltage 120.000;
+}
+
+object node {
+	name M56;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M76;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M38;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name TR44;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M86;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M87;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M84;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M85;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M82;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M83;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M80;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M81;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name TR104;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name TR14;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M48;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name TR77;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M65;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M66;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M67;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name n107;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7203.777;
+	bustype SWING;
+}
+
+object node {
+	name M13;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name M12;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
+object node {
+	name TR88;
+	phases ABCN;
+	voltage_B -3600.889-6240.000j;
+	voltage_C -3600.889+6240.000j;
+	voltage_A 7200.777;
+	nominal_voltage 7201.777;
+}
+
